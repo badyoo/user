@@ -414,6 +414,12 @@
     </div>
 
     <script>
+      // 获取浏览器首选语言
+      var language = navigator.language || navigator.userLanguage;
+      // 判断是否为中文（正则方法）
+      if (/zh/i.test(language) == true) {
+        window.location.href = "base64zh.html";
+      }
       // ========== Tab 切换 ==========
       document.querySelectorAll(".tab").forEach((tab) => {
         tab.addEventListener("click", () => {
