@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>text mp3 jpg png to Base64 Encoding Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background-color: #121212;
+        color: #e0e0e0;
+        font-family: "Segoe UI", system-ui, sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .lang-link {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #1e1e1e;
+        color: #a0a0a0;
+        text-decoration: none;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s;
+      }
+      .lang-link:hover {
+        background: #2a2a2a;
+        color: #e0e0e0;
+      }
+
+      .container {
+        max-width: 800px;
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      h1 {
+        font-size: 2.4rem;
+        margin-bottom: 10px;
+        background: linear-gradient(90deg, #8a2be2, #4facfe);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        font-weight: 700;
+      }
+
+      .subtitle {
+        font-size: 1.1rem;
+        color: #a0a0a0;
+        max-width: 600px;
+        margin: 0 auto 20px;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 4px;
+        margin-bottom: 20px;
+        justify-content: center;
+      }
+
+      .tab {
+        padding: 10px 24px;
+        background: #1e1e1e;
+        border: none;
+        border-radius: 8px 8px 0 0;
+        color: #a0a0a0;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .tab.active {
+        background: #2a2a2a;
+        color: #e0e0e0;
+        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      .tab-content {
+        display: none;
+        background: #1e1e1e;
+        border-radius: 12px;
+        padding: 24px;
+        animation: fadeIn 0.4s ease forwards;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .upload-area {
+        background-color: #1e1e1e;
+        border: 2px dashed #444;
+        border-radius: 12px;
+        padding: 40px 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 24px;
+      }
+      .upload-area:hover {
+        border-color: #6a7bff;
+        background-color: #252525;
+      }
+
+      .upload-text {
+        font-size: 1.2rem;
+        margin: 16px 0 8px;
+      }
+      .upload-hint {
+        font-size: 0.9rem;
+        color: #777;
+      }
+      .file-input {
+        display: none;
+      }
+
+      .text-converter {
+        margin-bottom: 24px;
+      }
+      .input-group {
+        margin-bottom: 16px;
+      }
+      .input-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+
+      textarea {
+        width: 100%;
+        height: 120px;
+        background: #161616;
+        color: #e0e0e0;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 14px;
+        font-family: "Consolas", monospace;
+        font-size: 1rem;
+        resize: vertical;
+        transition: border-color 0.3s;
+      }
+      textarea:focus {
+        outline: none;
+        border-color: #6a7bff;
+        box-shadow: 0 0 0 2px rgba(106, 123, 255, 0.2);
+      }
+
+      .buttons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        color: #000;
+      }
+      .btn-secondary {
+        background: #2a2a2a;
+        color: #e0e0e0;
+      }
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .result-area {
+        margin-top: 20px;
+      }
+      .result-label {
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .result-output {
+        background: #161616;
+        color: #a0d8a0;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 14px;
+        font-family: "Consolas", monospace;
+        white-space: pre-wrap;
+        word-break: break-all;
+        min-height: 60px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      .result-output:hover {
+        background: #1a1a1a;
+      }
+      .result-output.copied::after {
+        content: "📋 Copied";
+        margin-left: 10px;
+        color: #4caf50;
+        animation: pulse 1s;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+
+      .actions {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 24px;
+      }
+
+      .save-btn {
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        color: #000;
+        border: none;
+        border-radius: 8px;
+        padding: 12px 28px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .save-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .results {
+        width: 100%;
+      }
+
+      .result-item {
+        background-color: #1e1e1e;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: fadeInUp 0.6s ease forwards;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      .result-item:hover {
+        background-color: #2a2a2a;
+      }
+      .result-icon {
+        font-size: 1.4rem;
+        min-width: 24px;
+        text-align: center;
+      }
+      .result-name {
+        font-weight: 600;
+        word-break: break-all;
+        flex: 1;
+      }
+
+      .footer {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 0.85rem;
+        color: #666;
+      }
+
+      @media (max-width: 600px) {
+        .lang-link {
+          top: 10px;
+          right: 10px;
+          font-size: 0.8rem;
+          padding: 4px 8px;
+        }
+        h1 {
+          font-size: 2rem;
+        }
+        .tab {
+          padding: 8px 16px;
+          font-size: 0.9rem;
+        }
+        .buttons {
+          flex-direction: column;
+        }
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      .copy-btn {
+        background: #2a2a2a;
+        color: #a0a0a0;
+        border: 1px solid #444;
+        border-radius: 6px;
+        padding: 4px 10px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: all 0.2s;
+        margin-left: auto;
+      }
+      .copy-btn:hover {
+        background: #333;
+        color: #e0e0e0;
+        border-color: #6a7bff;
+      }
+      .copy-btn.copied {
+        background: #1e3a2a;
+        color: #a0d8a0;
+        border-color: #2e7d32;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 跳转中文版 -->
+    <a href="base64zh.html" class="lang-link"> <span>🌐</span> 中文 </a>
+
+    <div class="container">
+      <header>
+        <h1>Base64 Encoding Tool</h1>
+        <p class="subtitle">Convert JPG / PNG / MP3 files and text ↔ Base64 — 100% client-side, private & secure</p>
+      </header>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="file">📁 File Converter</button>
+        <button class="tab" data-tab="text">🔤 Text Converter</button>
+      </div>
+
+      <div class="tab-content active" id="tab-file">
+        <div class="upload-area" id="dropZone">
+          <div>📤</div>
+          <div class="upload-text">Click to select files, or drag & drop here</div>
+          <div class="upload-hint">Supports: JPG, PNG, MP3</div>
+          <input type="file" id="fileInput" class="file-input" accept=".jpg,.jpeg,.png,.mp3" multiple />
+        </div>
+
+        <div class="actions">
+          <button id="saveBtn" class="save-btn" disabled><span>💾</span> Save All Results</button>
+        </div>
+
+        <div class="results" id="results"></div>
+      </div>
+
+      <div class="tab-content" id="tab-text">
+        <div class="text-converter">
+          <div class="input-group">
+            <label class="input-label">Enter text or Base64</label>
+            <textarea id="textInput" placeholder="e.g. Hello World or SGVsbG8gV29ybGQ=&#10;Paste or drag .txt files supported"></textarea>
+          </div>
+
+          <div class="buttons">
+            <button class="btn btn-primary" id="btnEncode">🔤 Text → Base64</button>
+            <button class="btn btn-primary" id="btnDecode">📝 Base64 → Text</button>
+            <button class="btn btn-secondary" id="btnAuto">🔄 Auto Detect & Convert</button>
+            <button class="btn btn-secondary" id="btnClear">🗑️ Clear</button>
+          </div>
+
+          <div class="result-area">
+            <div class="result-label">Result: <span id="resultType">—</span></div>
+            <div class="result-output" id="textOutput" onclick="copyResult(this)">Click to copy result</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>🔒 All processing is local</p>
+      </div>
+    </div>
+
+    <script>
+      // ========== Tab 切换 ==========
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
+          document.querySelectorAll(".tab-content").forEach((c) => c.classList.remove("active"));
+          tab.classList.add("active");
+          document.getElementById("tab-" + tab.dataset.tab).classList.add("active");
+        });
+      });
+
+      // ========== 文件转换 ==========
+      const dropZone = document.getElementById("dropZone");
+      const fileInput = document.getElementById("fileInput");
+      const results = document.getElementById("results");
+      const saveBtn = document.getElementById("saveBtn");
+      const convertedFiles = [];
+
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        dropZone.addEventListener(
+          eventName,
+          (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          },
+          false
+        );
+      });
+
+      ["dragenter", "dragover"].forEach((eventName) => {
+        dropZone.addEventListener(
+          eventName,
+          () => {
+            dropZone.style.borderColor = "#6a7bff";
+            dropZone.style.backgroundColor = "#2a2a2a";
+          },
+          false
+        );
+      });
+
+      ["dragleave", "drop"].forEach((eventName) => {
+        dropZone.addEventListener(
+          eventName,
+          () => {
+            dropZone.style.borderColor = "#444";
+            dropZone.style.backgroundColor = "#1e1e1e";
+          },
+          false
+        );
+      });
+
+      dropZone.addEventListener("drop", (e) => {
+        handleFiles(e.dataTransfer.files);
+      });
+
+      dropZone.addEventListener("click", () => fileInput.click());
+      fileInput.addEventListener("change", (e) => handleFiles(e.target.files));
+
+      function handleFiles(fileList) {
+        if (!fileList || fileList.length === 0) return;
+        Array.from(fileList).forEach((file) => {
+          const validTypes = ["image/jpeg", "image/png", "audio/mpeg"];
+          if (!validTypes.includes(file.type)) {
+            alert(`⚠️ Unsupported file type: ${file.name} (JPG / PNG / MP3 only)`);
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const item = { filename: file.name, mimeType: file.type, base64: e.target.result };
+            convertedFiles.push(item);
+            addResultToDOM(item);
+            saveBtn.disabled = false;
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function addResultToDOM(item) {
+        const div = document.createElement("div");
+        div.className = "result-item animate__animated animate__fadeInUp";
+        div.innerHTML = `
+    <span class="result-icon">✅</span>
+    <span class="result-name">${escapeHtml(item.filename)}</span>
+    <button class="copy-btn" data-filename="${escapeHtml(item.filename)}">📋 Copy</button>
+  `;
+        results.prepend(div);
+
+        // Whole row click to copy (keep old behavior)
+        div.addEventListener("click", async (e) => {
+          if (e.target.closest(".copy-btn")) return;
+          const icon = div.querySelector(".result-icon");
+          try {
+            await navigator.clipboard.writeText(item.base64);
+            icon.textContent = "📋";
+            setTimeout(() => (icon.textContent = "✅"), 1500);
+          } catch {
+            icon.textContent = "⚠️";
+            setTimeout(() => (icon.textContent = "✅"), 1500);
+          }
+        });
+
+        // New: Dedicated Copy button
+        const copyBtn = div.querySelector(".copy-btn");
+        copyBtn.addEventListener("click", async (e) => {
+          e.stopPropagation();
+          try {
+            await navigator.clipboard.writeText(item.base64);
+            copyBtn.textContent = "✅ Copied!";
+            copyBtn.classList.add("copied");
+            setTimeout(() => {
+              copyBtn.textContent = "📋 Copy";
+              copyBtn.classList.remove("copied");
+            }, 1200);
+          } catch (err) {
+            copyBtn.textContent = "⚠️ Failed";
+            setTimeout(() => {
+              copyBtn.textContent = "📋 Copy";
+              copyBtn.classList.remove("copied");
+            }, 1200);
+          }
+        });
+      }
+
+      saveBtn.addEventListener("click", () => {
+        if (convertedFiles.length === 0) return;
+        const data = {
+          files: convertedFiles.map((f) => ({ filename: f.filename, mimeType: f.mimeType, base64: f.base64 })),
+          exportedAt: new Date().toISOString(),
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = Object.assign(document.createElement("a"), {
+          href: url,
+          download: "base64_results.json",
+        });
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 100);
+      });
+
+      // ========== 文本转换 ==========
+      const textInput = document.getElementById("textInput");
+      const textOutput = document.getElementById("textOutput");
+      const resultType = document.getElementById("resultType");
+      const btnEncode = document.getElementById("btnEncode");
+      const btnDecode = document.getElementById("btnDecode");
+      const btnAuto = document.getElementById("btnAuto");
+      const btnClear = document.getElementById("btnClear");
+
+      textInput.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        textInput.style.borderColor = "#6a7bff";
+      });
+      textInput.addEventListener("dragleave", () => (textInput.style.borderColor = "#333"));
+      textInput.addEventListener("drop", (e) => {
+        e.preventDefault();
+        textInput.style.borderColor = "#333";
+        const file = e.dataTransfer.files[0];
+        if (file && file.type === "text/plain") {
+          const reader = new FileReader();
+          reader.onload = () => (textInput.value = reader.result);
+          reader.readAsText(file);
+        }
+      });
+
+      function b64Encode(str) {
+        return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode("0x" + p1)));
+      }
+
+      function b64Decode(b64) {
+        try {
+          return decodeURIComponent(
+            atob(b64)
+              .split("")
+              .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+              .join("")
+          );
+        } catch (e) {
+          throw new Error("Invalid Base64 string");
+        }
+      }
+
+      function isBase64(str) {
+        const trimmed = str.trim().replace(/\s/g, "");
+        if (trimmed.length === 0 || trimmed.length % 4 !== 0) return false;
+        return /^[A-Za-z0-9+/]*={0,2}$/.test(trimmed);
+      }
+
+      function updateResult(text, type) {
+        textOutput.textContent = text || "—";
+        resultType.textContent = type;
+        textOutput.classList.remove("copied");
+      }
+
+      function copyResult(el) {
+        if (!el.textContent || el.textContent === "Click to copy result") return;
+        navigator.clipboard.writeText(el.textContent).then(() => {
+          el.classList.add("copied");
+          setTimeout(() => el.classList.remove("copied"), 2000);
+        });
+      }
+
+      btnEncode.onclick = () => {
+        const val = textInput.value.trim();
+        if (!val) return alert("Please enter text");
+        try {
+          const encoded = b64Encode(val);
+          updateResult(encoded, "Base64");
+        } catch (e) {
+          alert("Encoding failed: " + e.message);
+        }
+      };
+
+      btnDecode.onclick = () => {
+        const val = textInput.value.trim();
+        if (!val) return alert("Please enter a Base64 string");
+        try {
+          const decoded = b64Decode(val);
+          updateResult(decoded, "Text");
+        } catch (e) {
+          alert("Decoding failed: " + e.message);
+        }
+      };
+
+      btnAuto.onclick = () => {
+        const val = textInput.value.trim();
+        if (!val) return alert("Please enter content");
+        if (isBase64(val)) {
+          try {
+            const decoded = b64Decode(val);
+            updateResult(decoded, "Text (auto-detected)");
+          } catch (e) {
+            updateResult(`❌ Decoding failed: ${e.message}`, "Error");
+          }
+        } else {
+          try {
+            const encoded = b64Encode(val);
+            updateResult(encoded, "Base64 (auto-detected)");
+          } catch (e) {
+            updateResult(`❌ Encoding failed: ${e.message}`, "Error");
+          }
+        }
+      };
+
+      btnClear.onclick = () => {
+        textInput.value = "";
+        updateResult("Click to copy result", "—");
+      };
+
+      updateResult("Click to copy result", "—");
+
+      function escapeHtml(text) {
+        const div = document.createElement("div");
+        div.textContent = text;
+        return div.innerHTML;
+      }
+    </script>
+  </body>
+</html>
